@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/lucindo/under_pressure/pressure"
 	"github.com/lucindo/under_pressure/log"
+	"github.com/lucindo/under_pressure/pressure"
 )
 
 // PostPressure function inserts a new Pressure point on the storage

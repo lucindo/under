@@ -5,10 +5,10 @@ import "fmt"
 
 // Pressure data type
 type Pressure struct {
-	Systolic  float32   `json:"systolic"`
-	Diastolic float32   `json:"diastolic"`
-	HeartRate int   `json:"heartrate,omitempty"`
-	Timestamp int64 `json:"timestamp"`
+	Systolic  float32 `json:"systolic"`
+	Diastolic float32 `json:"diastolic"`
+	HeartRate int     `json:"heartrate,omitempty"`
+	Timestamp int64   `json:"timestamp"`
 }
 
 func (p Pressure) String() string {
