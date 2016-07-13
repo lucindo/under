@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/lucindo/under_pressure/log"
 	"github.com/lucindo/under_pressure/pressure"
+	"github.com/lucindo/under_pressure/storage"
 )
 
 // PostPressure function inserts a new Pressure point on the storage
@@ -22,7 +22,7 @@ func PostPressure(w http.ResponseWriter, r *http.Request) {
 		if err != nil || !input.Valid() {
 			w.WriteHeader(http.StatusBadRequest)
 		} else {
-			log.Logger.Println(input)
+			storage.AddPressure(input)
 		}
 	}
 }
