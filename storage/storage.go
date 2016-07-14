@@ -53,10 +53,7 @@ func Close() {
 func AddPressure(p pressure.Pressure) {
 	log.Logger.Printf("adding new pressure point to the database: %s\n", p)
 	err := db.Update(func(tx *bolt.Tx) error {
-		b, err := tx.CreateBucketIfNotExists([]byte(bucket))
-		if err != nil {
-			return err
-		}
+		b := tx.Bucket([]byte(bucket))
 		encoded, err := json.Marshal(p)
 		if err != nil {
 			return err
