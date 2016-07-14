@@ -33,6 +33,8 @@ func main() {
 	defer storage.Close()
 
 	http.HandleFunc("/new", handlers.PostPressure)
+	http.HandleFunc("/all", handlers.ListPressures)
+
 	server := &http.Server{
 		Addr:     fmt.Sprintf(":%d", *port),
 		ErrorLog: log.Logger,

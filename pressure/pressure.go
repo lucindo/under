@@ -5,14 +5,14 @@ import "fmt"
 
 // Pressure data type
 type Pressure struct {
-	Systolic  float32 `json:"systolic"`
-	Diastolic float32 `json:"diastolic"`
-	HeartRate int     `json:"heartrate,omitempty"`
-	Timestamp int64   `json:"timestamp"`
+	Systolic  int   `json:"systolic"`
+	Diastolic int   `json:"diastolic"`
+	HeartRate int   `json:"heartrate,omitempty"`
+	Timestamp int64 `json:"timestamp"`
 }
 
 func (p Pressure) String() string {
-	return fmt.Sprintf("{systolic:%f, diastolic:%f, heartrate:%d, timestamp:%d}", p.Systolic, p.Diastolic, p.HeartRate, p.Timestamp)
+	return fmt.Sprintf("{systolic:%d, diastolic:%d, heartrate:%d, timestamp:%d}", p.Systolic, p.Diastolic, p.HeartRate, p.Timestamp)
 }
 
 // Valid checks if a Pressure is valid

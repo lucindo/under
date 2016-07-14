@@ -26,3 +26,17 @@ func PostPressure(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 }
+
+// ListPressures lists all pressure points
+func ListPressures(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "GET" {
+		w.WriteHeader(http.StatusBadRequest)
+	} else {
+		pressures := storage.ListPressures()
+		encoder := json.NewEncoder(w)
+		err := encoder.Encode(pressures)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+		}
+	}
+}

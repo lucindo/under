@@ -67,3 +67,26 @@ func AddPressure(p pressure.Pressure) {
 		log.Logger.Printf("error adding %s to database: %v\n", p, err)
 	}
 }
+
+// ListPressures lists all pressure points on database
+func ListPressures() []pressure.Pressure {
+	var pList []pressure.Pressure
+	log.Logger.Printf("getting all pressure points")
+	err := db.View(func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte(bucket))
+		err := b.ForEach(func(k, v []byte) error {
+			var decoded pressure.Pressure
+			err := json.Unmarshal(v, &decoded)
+			if err != nil {
+				log.Logger.Printf("error decoding pressure point key [%v]: %v\n", k, err)
+			}
+			pList = append(pList, decoded)
+			return nil
+		})
+		return err
+	})
+	if err != nil {
+		log.Logger.Printf("error reading database: %v\n", err)
+	}
+	return pList
+}
