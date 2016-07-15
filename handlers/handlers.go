@@ -52,7 +52,7 @@ func ListPressuresCSV(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "text/csv")
 		fmt.Fprintf(w, "Date,Systolic,Diastolic,Heart Rate\n")
 		for _, p := range pressures {
-			fmt.Fprintf(w, "%s,%d,%d,%d\n", time.Unix(p.Timestamp, 0).Format("2006/01/02 15:04:05") , p.Systolic, p.Diastolic, p.HeartRate)
+			fmt.Fprintf(w, "%s,%d,%d,%d\n", time.Unix(p.Timestamp, 0).Format("2006/01/02 15:04:05"), p.Systolic, p.Diastolic, p.HeartRate)
 		}
 	}
 }
