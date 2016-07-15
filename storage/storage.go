@@ -3,6 +3,7 @@ package storage
 
 import (
 	"encoding/json"
+	"fmt"
 
 	"github.com/boltdb/bolt"
 	"github.com/lucindo/under_pressure/log"
@@ -58,7 +59,7 @@ func AddPressure(p pressure.Pressure) {
 		if err != nil {
 			return err
 		}
-		return b.Put([]byte(string(p.Timestamp)), encoded)
+		return b.Put([]byte(fmt.Sprintf("%d", p.Timestamp)), encoded)
 	})
 	if err != nil {
 		log.Logger.Printf("error adding %s to database: %v\n", p, err)
@@ -85,5 +86,6 @@ func ListPressures() []pressure.Pressure {
 	if err != nil {
 		log.Logger.Printf("error reading database: %v\n", err)
 	}
+	log.Logger.Printf("got %d pressure points from database\n", len(pList))
 	return pList
 }

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+        <title>Under Pressure</title>
+
+        <!-- Bootstrap -->
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+              integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+        <!-- Custom styles for this template -->
+        <link href="jumbotron-narrow.css" rel="stylesheet">
+
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker-standalone.min.css"
+              rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css"
+              rel="stylesheet">
+
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+            <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+    </head>
+
+    <body>
+        <div class="container">
+            <div class="header clearfix">
+                <nav>
+                    <ul class="nav nav-pills pull-right">
+                        <li role="presentation" class="active">
+                            <!-- Button trigger modal -->
+                            <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#addModal">
+                                Add
+                            </button>
+                        </li>
+                    </ul>
+                </nav>
+                <h3 class="text-muted">Under Pressure</h3>
+            </div>
+
+            <div class="jumbotron">
+                <div id="graphdiv"></div>
+            </div>
+
+            <footer class="footer">
+                <p>&copy; 2016 Renato Lucindo</p>
+            </footer>
+
+            <div class="modal fade" id="addModal" tabindex="-1" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h4 class="modal-title">Add Pressure</h4>
+                        </div>
+                        <div class="modal-body">
+                            <form class="form-inline">
+                                <center>
+                                    <div style="height:30px;">&nbsp;</div>
+                                    <div id="date"></div>
+                                    <div style="height:50px;">&nbsp;</div>
+                                    <div class="form-group">
+                                        <label class="sr-only" for="Systolic">Systolic</label>
+                                        <input type="text" class="form-control" id="systolic" placeholder="Systolic (ex: 120)">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="sr-only" for="Diastolic">Diastolic</label>
+                                        <input type="text" class="form-control" id="diastolic" placeholder="Diastolic (ex: 80)">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="sr-only" for="HeartRate">HeartRate</label>
+                                        <input type="text" class="form-control" id="heartrate" placeholder="Heart Rate (ex: 70)">
+                                    </div>
+                                    <div style="height:30px;">&nbsp;</div>
+                                </center>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" id="addPressure">Add Pressure</button>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+
+        </div> <!-- /container -->
+
+        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <!-- Include all compiled plugins (below), or include individual files as needed -->
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+                integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js"
+                crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"
+                crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/dygraph/1.1.1/dygraph-combined.js"
+                crossorigin="anonymous"></script>
+        <script type="text/javascript">
+         function loadData() {
+             var systolic = $('#systolic').val();
+             var diastolic = $('#diastolic').val();
+             var heartrate = $('#heartrate').val();
+             var timestamp = $('#date').data("DateTimePicker").date().unix();
+             return {
+                 "systolic": parseInt(systolic),
+                 "diastolic": parseInt(diastolic),
+                 "heartrate": parseInt(heartrate),
+                 "timestamp": parseInt(timestamp)
+             };
+         }
+         function sendData(data) {
+             $.ajax({
+                 type: "POST",
+                 url: "/new",
+                 data: JSON.stringify(data),
+                 contentType: "application/json; charset=utf-8",
+                 dataType: "json",
+                 success: function(response) { alert(response); },
+                 failure: function(errMsg) {
+                     alert(errMsg);
+                 }
+             });
+         }
+         function loadGraph() {
+             g = new Dygraph(
+                 document.getElementById("graphdiv"),
+                 "/all.csv",
+                 {
+                     stackedGraph: true,
+                     highlightCircleSize: 2,
+                     strokeWidth: 1,
+                     strokeBorderWidth: null,
+                 }
+             );
+         }
+         $(function () {
+             $('#date').datetimepicker({
+                 inline: true,
+                 sideBySide: true
+             });
+
+             loadGraph();
+
+             $('#addPressure').on('click', function(event) {
+                 event.preventDefault();
+                 $('#addPressure').prop('disabled', true);
+                 var data = loadData();
+                 console.log(data);
+                 sendData(data);
+                 $('#addModal').modal('hide');
+                 $('#addPressure').prop('disabled', false);
+                 loadGraph();
+             });
+         });
+        </script>
+    </body>
+</html>

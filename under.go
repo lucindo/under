@@ -15,6 +15,7 @@ import (
 func main() {
 	port := flag.Int("port", 8080, "port number")
 	dbfile := flag.String("dbfile", "/tmp/pressure.bolt", "database filename")
+	staticDir := flag.String("staticdir", "./static", "static files dir path")
 	interrupt := make(chan os.Signal, 1)
 
 	log.Init()
@@ -32,13 +33,15 @@ func main() {
 	storage.Init(*dbfile)
 	defer storage.Close()
 
+	http.Handle("/", http.FileServer(http.Dir(*staticDir)))
 	http.HandleFunc("/new", handlers.PostPressure)
 	http.HandleFunc("/all", handlers.ListPressures)
+	http.HandleFunc("/all.csv", handlers.ListPressuresCSV)
 
 	server := &http.Server{
 		Addr:     fmt.Sprintf(":%d", *port),
 		ErrorLog: log.Logger,
 	}
-	log.Logger.Printf("listening on port %d\n", *port)
+	log.Logger.Printf("listening on port %d (static files from %s)\n", *port, *staticDir)
 	log.Logger.Fatal(server.ListenAndServe())
 }

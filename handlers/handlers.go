@@ -3,7 +3,9 @@ package handlers
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/lucindo/under_pressure/pressure"
 	"github.com/lucindo/under_pressure/storage"
@@ -37,6 +39,20 @@ func ListPressures(w http.ResponseWriter, r *http.Request) {
 		err := encoder.Encode(pressures)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
+		}
+	}
+}
+
+// ListPressuresCSV lists all pressure points in CSV format
+func ListPressuresCSV(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "GET" {
+		w.WriteHeader(http.StatusBadRequest)
+	} else {
+		pressures := storage.ListPressures()
+		w.Header().Set("Content-Type", "text/csv")
+		fmt.Fprintf(w, "Date,Systolic,Diastolic,Heart Rate\n")
+		for _, p := range pressures {
+			fmt.Fprintf(w, "%s,%d,%d,%d\n", time.Unix(p.Timestamp, 0).Format("2006/01/02 15:04:05") , p.Systolic, p.Diastolic, p.HeartRate)
 		}
 	}
 }
