@@ -16,10 +16,16 @@ func main() {
 	port := flag.Int("port", 8080, "port number")
 	dbfile := flag.String("dbfile", "/tmp/pressure.bolt", "database filename")
 	staticDir := flag.String("staticdir", "./static", "static files dir path")
+	help := flag.Bool("help", false, "prints usage and exits")
 	interrupt := make(chan os.Signal, 1)
 
 	log.Init()
 	flag.Parse()
+
+	if *help {
+		flag.PrintDefaults()
+		os.Exit(0)
+	}
 
 	signal.Notify(interrupt, os.Interrupt)
 	go func() {
