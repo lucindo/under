@@ -67,3 +67,20 @@ func ListPressuresCSV(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 }
+
+// RemovePressure removes a pressure point key (timestamp)
+func RemovePressure(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "DELETE" {
+		w.WriteHeader(http.StatusBadRequest)
+	} else {
+		timestamp := r.URL.Query().Get("timestamp")
+		if len(timestamp) != 0 {
+			err := storage.DeletePressure(timestamp)
+			if err != nil {
+				w.WriteHeader(http.StatusInternalServerError)
+			}
+		} else {
+			w.WriteHeader(http.StatusBadRequest)
+		}
+	}
+}

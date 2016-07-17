@@ -43,6 +43,7 @@ func main() {
 	http.HandleFunc("/new", handlers.PostPressure)
 	http.HandleFunc("/all", handlers.ListPressures)
 	http.HandleFunc("/all.csv", handlers.ListPressuresCSV)
+	http.HandleFunc("/delete", handlers.RemovePressure)
 
 	server := &http.Server{
 		Addr:     fmt.Sprintf(":%d", *port),

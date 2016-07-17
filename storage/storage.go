@@ -93,3 +93,17 @@ func ListPressures() ([]pressure.Pressure, error) {
 	log.Logger.Printf("got %d pressure points from database\n", len(pList))
 	return pList, nil
 }
+
+// DeletePressure removes a pressure point by key (timestamp)
+func DeletePressure(key string) error {
+	log.Logger.Printf("removing key: %s", key)
+	err := db.Update(func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte(bucket))
+		err := b.Delete([]byte(key))
+		return err
+	})
+	if err != nil {
+		log.Logger.Printf("error removing key[%s]: %v\n", key, err)
+	}
+	return err
+}

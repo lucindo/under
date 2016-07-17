@@ -11,7 +11,7 @@ it's a http service for my (high) blood pressure :/
 - [x] Basic REST interface (GET, POST)
 - [x] HTML interface
 - [ ] Tests :P
-- [ ] REST DELETE (by key)
+- [x] REST DELETE (by key)
 - [ ] HTTP Basic Auth
 - [ ] Graceful stop
 - [ ] Log levels
